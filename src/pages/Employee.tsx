@@ -14,3 +14,5 @@ function Employees() {
     </div>
   );
 }
+
+export default Employees;

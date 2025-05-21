@@ -14,3 +14,4 @@ function Clients() {
     </div>
   );
 }
+export default Clients;

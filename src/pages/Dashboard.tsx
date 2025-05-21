@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Profile from "./Profile";
 
 const tabs = ["Overview", "Clients", "Employees", "Profile"];
 

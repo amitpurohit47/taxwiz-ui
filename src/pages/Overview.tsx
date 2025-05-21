@@ -1,4 +1,4 @@
-function Overview() {
+export default function Overview() {
   return (
     <div>
       <h3 className="text-xl font-semibold mb-4">Latest Clients</h3>
