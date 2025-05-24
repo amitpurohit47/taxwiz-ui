@@ -1,14 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "../components/Table";
-
-type Client = {
-  id: string;
-  name: string;
-  gstNo: string;
-  email: string;
-  phone: string;
-  employee?: string;
-};
+import type { Client } from "../types/Client";
+import {
+  fetchClients
+} from "../services/client";
+import Loader from "../components/Loader";
+import type { Error } from "../types/Error";
 
 const columns: { header: string; accessor: keyof Client }[] = [
   { header: "Client ID", accessor: "id" },
@@ -19,33 +16,54 @@ const columns: { header: string; accessor: keyof Client }[] = [
   { header: "Managed By", accessor: "employee" },
 ];
 
-const verifiedClients: Client[] = [
-  {
-    id: "C001",
-    name: "Acme Corp",
-    gstNo: "29ABCDE1234F2Z5",
-    email: "info@acme.com",
-    phone: "9876543210",
-    employee: "John Doe",
-  },
-];
-
-const unassignedClients: Client[] = [
-  {
-    id: "C002",
-    name: "Beta Inc",
-    gstNo: "29ABCDE1234F2Z5",
-    email: "beta@inc.com",
-    phone: "3829839873"
-  }
-]
-
 const Clients: React.FC = () => {
-  return (
+  const [verifiedClients, setVerifiedClients] = useState<Client[]>([]);
+  const [unverifiedClients, setUnverifiedClients] = useState<Client[]>([]);
+  const [unassignedClients, setUnassignedClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [verifiedError, setVerifiedError] = useState<Error | null>(null);
+  const [unverifiedError, setUnverifiedError] = useState<Error | null>(null);
+  const [unassignedError, setUnassignedError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const getClients = async () => {
+      setLoading(true);
+      await fetchClients(setVerifiedClients, setUnverifiedClients, setUnassignedClients, setVerifiedError, setUnverifiedError, setUnassignedError);
+      setLoading(false);
+    };
+    getClients();
+  }, []);
+
+  // Add a nice loader when the data is being fetched
+
+  return loading ? (
+    <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <Loader />
+      </div>
+  ) : (
     <div className="p-6 space-y-10">
-      <Table title="Verified & Assigned Clients" columns={columns} data={verifiedClients} />
-      <Table title="Unverified Clients" columns={columns} data={[]} />
-      <Table title="Unassigned Clients" columns={columns} data={unassignedClients} />
+      { verifiedError ?  <p className="text-red-500">{verifiedError.message}</p> : <Table
+        title="Verified Clients"
+        columns={columns}
+        data={verifiedClients}
+      />}
+      { unverifiedError ? <p className="text-red-500">{unverifiedError.message}</p> : <Table
+        title="Unverified Clients"
+        columns={columns}
+        data={unverifiedClients}
+      />}
+      { unassignedError ? <p className="text-red-500">{unassignedError.message}</p> : <Table
+        title="Unassigned Clients"
+        columns={columns}
+        data={unassignedClients}
+      />}
     </div>
   );
 };

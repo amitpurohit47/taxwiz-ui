@@ -1,4 +1,4 @@
-import { userLogin } from "../api";
+import { userLogin } from "../api/auth";
 import type { ApiResponse } from "../types/ApiResponse";
 
 export const handleLogin = async (
