@@ -4,12 +4,13 @@ import { handleLogin } from "../services/login";
 export default function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(username);
-
-    handleLogin(username, password);
+    handleLogin(username, password, setUserName, setPassword, setUsernameError, setPasswordError);
   };
 
   return (
@@ -34,6 +35,13 @@ export default function Login() {
               value={username}
               onChange={(e) => setUserName(e.target.value)}
             />
+            <p
+              className={`text-red-500 text-sm mt-1 ${
+                usernameError === null ? "invisible" : "visible"
+              }`}
+            >
+              {usernameError}
+            </p>
           </div>
 
           <div>
@@ -51,6 +59,13 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <p
+              className={`text-red-500 text-sm mt-1 ${
+                passwordError === null ? "invisible" : "visible"
+              }`}
+            >
+              {usernameError}
+            </p>
           </div>
 
           <button
