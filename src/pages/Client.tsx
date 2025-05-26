@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 import type { Error } from "../types/Error";
 
 const columns: { header: string; accessor: keyof Client }[] = [
-  { header: "Client ID", accessor: "id" },
+  { header: "Client ID", accessor: "uid" },
   { header: "Name", accessor: "name" },
   { header: "GST No", accessor: "gstNo" },
   { header: "Email", accessor: "email" },
